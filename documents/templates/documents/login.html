@@ -1,0 +1,32 @@
+{% extends "documents/base.html" %}
+{% load static %}
+{% block content %}
+<div style="text-align: center; margin: 20px;">
+    <h2>Login with Token</h2>
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <!-- Login Form -->
+    <form method="post" style="margin-top: 20px;">
+        {% csrf_token %}
+        <label for="token" style="font-size: 16px; font-weight: bold;">Enter Token:</label>
+        <br>
+        <input type="text" id="token" name="token" required
+               style="width: 50%; padding: 10px; margin: 10px 0; font-size: 14px; border: 1px solid #ccc; border-radius: 5px;">
+        <br>
+        <button type="submit"
+                style="background-color: #2d3e50; color: white; padding: 10px 20px; border-radius: 5px; font-size: 14px; border: none; cursor: pointer;">
+            Login
+        </button>
+    </form>
+
+    <!-- Admin Login Button -->
+    <div style="margin-top: 30px;">
+        <a href="/admin/"
+           style="background-color: #f4a300; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-size: 14px;">
+            Admin Login
+        </a>
+    </div>
+</div>
+{% endblock %}

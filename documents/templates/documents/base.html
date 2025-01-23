@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="Nordatech Energies Document Management System - Securely manage and share your documents.">
+    <title>{% block title %}Document Management System{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Favicon -->
+    {% comment %} <link rel="icon" href="{% static 'images/logo.png' %}"> {% endcomment %}
+
+    <style>
+        /* Global Reset */
+        * {
+            margin: 0;
+            padding: 2;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-size: 28px;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #2d3e50;
+            color: #fff;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header .logo-container img {
+            width: 100px;
+            justify-content: center;
+            text-align: center;
+            display: flex;
+        }
+
+        header .site-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 42px;
+            font-weight: 600;
+            align-self: center;
+            
+           
+        }
+
+        nav.navbar {
+            background: #2d3e50;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav.navbar .nav-link {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        nav.navbar .nav-link i {
+            margin-right: 8px;
+        }
+
+        nav.navbar .nav-link:hover {
+            color: #f4a300;
+            transition: color 0.3s ease-in-out;
+        }
+
+        main.container {
+            flex: 1;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        main.container h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            color: #2d3e50;
+            margin-bottom: 20px;
+        }
+
+        main.container p {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        main.container .btn {
+            background-color: #f4a300;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 10px 5px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        main.container .btn:hover {
+            background-color: #d88c00;
+            transform: scale(1.05);
+        }
+
+        footer.footer {
+            background: #2d3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        footer.footer .footer-content {
+            margin: 10px 0;
+        }
+
+        footer.footer .social-icons i {
+            color: white;
+            font-size: 18px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        footer.footer .social-icons i:hover {
+            color: #f4a300;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav.navbar {
+                flex-direction: column;
+            }
+
+            nav.navbar .nav-link {
+                margin: 10px 0;
+            }
+
+            main.container {
+                padding: 20px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <img src="{% static '\images\logo.png' %}" alt="Nordatech Energies Ltd Logo">
+        </div>
+        <h1 class="site-title">Nordatech Energies Document Management System</h1>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="{% url 'documents:list' %}" class="nav-link">
+            <i class="fa fa-folder"></i> Documents
+        </a>
+        <a href="{% url 'documents:upload' %}" class="nav-link">
+            <i class="fa fa-upload"></i> Upload Document
+        </a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'documents:logout' %}" class="nav-link">
+            <i class="fa fa-sign-out-alt"></i> Logout
+        </a>
+        {% else %}
+        <a href="{% url 'documents:login' %}" class="nav-link">
+            <i class="fa fa-sign-in-alt"></i> Login
+        </a>
+        {% endif %}
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        {% block content %}
+        <!-- Injected page content -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Nordatech Energies Ltd. All rights reserved.</p>
+            <p>Powered by Nordatech Solutions</p>
+            <div class="social-icons">
+                <i class="fab fa-facebook-f" title="Facebook"></i>
+                <i class="fab fa-twitter" title="Twitter"></i>
+                <i class="fab fa-linkedin-in" title="LinkedIn"></i>
+                <i class="fab fa-instagram" title="Instagram"></i>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf_viewer.min.css">
+
+

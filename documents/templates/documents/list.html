@@ -1,0 +1,65 @@
+{% extends "documents/base.html" %}
+{% load static %}
+{% block content %}
+<h2>Document List</h2>
+<form method="get">
+    <input type="text" name="q" placeholder="Search documents..." value="{{ query }}">
+    <button type="submit">Search</button>
+</form>
+
+<ul>
+    {% for document in page_obj %}
+    <li>
+        {{ document.title }}
+        {% if document.allow_view %}
+        - <button onclick="openPdfViewer('{{ document.id }}')">View</button>
+        <script>
+            function openPdfViewer(documentId) {
+                fetch("{% url 'documents:serve_pdf' 0 %}".replace('0', documentId))
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        const pdfContainer = document.getElementById('pdf-container');
+                        pdfContainer.innerHTML = `<iframe src="${url}" width="100%" height="600px"></iframe>`;
+                        document.getElementById('pdf-viewer-modal').style.display = 'block';
+                    })
+                    .catch(error => console.error('Error fetching PDF:', error));
+            }
+
+            function closePdfViewer() {
+                document.getElementById('pdf-viewer-modal').style.display = 'none';
+                document.getElementById('pdf-container').innerHTML = '';
+            }
+        </script>
+        {% else %}
+        - <span style="color: red;">View Restricted</span>
+        {% endif %}
+        
+        {% if document.allow_download %}
+        | <a href="{{ document.file.url }}" download>Download</a>
+        {% else %}
+        | <span style="color: red;">Download Restricted</span>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+    <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?q={{ query }}&page={{ page_obj.next_page_number }}">Next</a>
+    {% endif %}
+</div>
+
+<!-- PDF Viewer Modal -->
+<div id="pdf-viewer-modal" style="display: none;">
+    <div id="pdf-container"></div>
+    <button onclick="closePdfViewer()">Close</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script src="{% static 'documents/js/pdf-viewer.js' %}"></script>
+{% endblock %}
